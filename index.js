@@ -16,22 +16,22 @@ var httpServer = http.createServer(function(req,res){
 });
 
 
-//server listens on port 3000
+//server listens on port httpPort
 httpServer.listen(config.httpPort,function(){
   console.log("The server is now listening on :",config.httpPort);
 });
 
 // Instantiate httpserver
 var httpsServerOptions = {
-  'key': fs.readFileSync('./https/key.pem'),
-  'cert': fs.readFileSync('./https/cert.pem')
+  key: fs.readFileSync('./https/key.pem'),
+  cert: fs.readFileSync('./https/key-cert.pem')
 };
 var httpsServer = https.createServer(httpsServerOptions,function(req,res){
   unifiedserver(req,res);
 });
 
 
-//server listens on port 3000
+//server listens on httpsPort
 httpsServer.listen(config.httpsPort,function(){
   console.log("The server is now listening on :",config.httpsPort);
 });
@@ -113,8 +113,14 @@ handlers.notfound = function(data,callback){
   callback(404);
 };
 
+//hello handler
+handlers.hello = function(data,callback){
+  callback(200,{'message' : 'Hello World!'});
+};
+
 // request router
 var router = {
   'sample': handlers.sample,
-  'ping' : handlers.ping
+  'ping' : handlers.ping,
+  'hello': handlers.hello
 }
